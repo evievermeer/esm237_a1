@@ -24,11 +24,12 @@ library(broom)
 
 Reading in data: 
 ```{r}
-slt_temps <-read.csv(here("data","slt_temps.csv"))%>% 
+slt_temps <-read.csv(here("data","slt_temps.csv")) 
 
 slt_precip <-read.csv(here("data","slt_precip.csv"))
 
-
-
 ```
+
+
+
 
