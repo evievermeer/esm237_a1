@@ -1,0 +1,34 @@
+---
+title: "Climate Trends, South Lake Tahoe, CA"
+author: "Evie Vermeer, Sophia Leiker and Eva Wilson"
+date: "4/5/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(tsibble)
+library(feasts)
+library(gghighlight)
+library(plotly)
+library(Kendall)
+library(kableExtra)
+library(broom)
+
+```
+
+Reading in data: 
+```{r}
+slt_temps <-read.csv(here("data","slt_temps.csv"))%>% 
+
+slt_precip <-read.csv(here("data","slt_precip.csv"))
+
+
+
+```
+
