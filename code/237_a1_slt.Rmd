@@ -65,7 +65,7 @@ Plotting Temp by Month
 ggplot(slt_temps, aes(x = year, y = january)) +
   geom_line() +
   #facet_wrap(~ year, nrow = 3) +
-  labs(title = "Averave Janurary Temperatures in South Lake Tahoe", x = "Month", y = "Temperature (F)")
+  labs(title = "Avg Janurary Temperatures in South Lake Tahoe", x = "Year", y = "Temperature (F)")
 ```
 
 -fututure work:
