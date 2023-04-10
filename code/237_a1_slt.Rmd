@@ -19,8 +19,10 @@ library(plotly)
 library(Kendall)
 library(kableExtra)
 library(broom)
+library(dplyr)
 
 ```
+
 
 Reading in data: 
 ```{r}
@@ -30,6 +32,43 @@ slt_precip <-read.csv(here("data","slt_precip.csv"))
 
 ```
 
+Cleaning up the data:
+```{r}
+#There are some columns in which the data is being characterized as "character" instead of "numeric" and therefore those columns have difficulty in running summary stats on. This must be due to the "M"'s present. Converting these columns to numeric format and adding NA's instead. 
 
+#Converting columns to numeric format
+slt_temps$june <- as.numeric(slt_temps$june)
+slt_temps$july <- as.numeric(slt_temps$july)
+slt_temps$august <- as.numeric(slt_temps$august)
+slt_temps$december <- as.numeric(slt_temps$december)
+slt_temps$january <- as.numeric(slt_temps$january)
+slt_temps$february <- as.numeric(slt_temps$february)
+
+```
+
+
+Grouping into Seasons
+```{r}
+# Group by year and calculate the mean for the columns that coincide with the NOAA Meteorological Seasons
+slt_temps_seasonal <- slt_temps %>%
+  mutate(spring = mean(c(march, april, may), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(summer = mean(c(june, july, august), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(fall = mean(c(september, october,november), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
+
+```
+
+Plotting Temp by Month
+```{r}
+
+# Create ggplot for monthly temperatures
+ggplot(slt_temps, aes(x = year, y = january)) +
+  geom_line() +
+  #facet_wrap(~ year, nrow = 3) +
+  labs(title = "Averave Janurary Temperatures in South Lake Tahoe", x = "Month", y = "Temperature (F)")
+```
+
+-fututure work:
+- facet wrap each of the months into one big plot showing changing tempers by month across all the years that have been measured 
 
 
