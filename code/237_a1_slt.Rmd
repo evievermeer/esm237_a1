@@ -57,8 +57,8 @@ slt_temps_seasonal <- slt_temps %>%
   mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
 
 ```
-
-Plotting Temp by Month
+ 
+Plotting Temp by Month 
 ```{r}
 
 # Create ggplot for monthly temperatures
