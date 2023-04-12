@@ -129,7 +129,7 @@ feb_temps_plot <- ggplot(slt_temps, aes(x = year, y = february)) +
   labs(title = "Avg Februrary Temperatures in South Lake Tahoe", x = "Year", y = "Temperature (F)", subtitle = "Data: NOAA Monthly Summarized Data", caption = "Regression Line Employed: Loess (locally weighted scatterplot smoothing)")
 
 feb_temps_plot
-=======
+```
 Calculate summary statistics 
 ```{r}
 # calculate annual summary statistics - precipitation
@@ -159,7 +159,6 @@ temps_august<- slt_temps_seasonal %>%
             min_temp = min(august, na.rm = TRUE), 
             mean_temp = mean(august, na.rm = TRUE))
 temps_august
->>>>>>> 743c4789cc5d7931cfebe16e5f2c9bff57209535
 ```
 
 -fututure work:
