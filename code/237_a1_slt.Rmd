@@ -62,10 +62,21 @@ Plotting Temp by Month
 ```{r}
 
 # Create ggplot for monthly temperatures
-ggplot(slt_temps, aes(x = year, y = january)) +
+#geom_smooth()` using method = 'loess'
+jan_temps_plot <- ggplot(slt_temps, aes(x = year, y = january)) +
   geom_line() +
-  #facet_wrap(~ year, nrow = 3) +
-  labs(title = "Avg Janurary Temperatures in South Lake Tahoe", x = "Year", y = "Temperature (F)")
+  stat_smooth(method = "auto", se = FALSE, color = "red") + 
+  labs(title = "Avg Janurary Temperatures in South Lake Tahoe", x = "Year", y = "Temperature (F)", subtitle = "Data: NOAA Monthly Summarized Data", caption = "Regression Line Employed: Loess (locally weighted scatterplot smoothing)")
+
+jan_temps_plot
+
+# Create ggplot for monthly temperatures
+feb_temps_plot <- ggplot(slt_temps, aes(x = year, y = february)) +
+  geom_line() +
+  stat_smooth(method = "auto", se = FALSE, color = "red") + 
+  labs(title = "Avg Februrary Temperatures in South Lake Tahoe", x = "Year", y = "Temperature (F)", subtitle = "Data: NOAA Monthly Summarized Data", caption = "Regression Line Employed: Loess (locally weighted scatterplot smoothing)")
+
+feb_temps_plot
 ```
 
 -fututure work:
