@@ -14,7 +14,6 @@ library(janitor)
 library(lubridate)
 library(tsibble)
 library(feasts)
-library(gghighlight)
 library(plotly)
 library(Kendall)
 library(kableExtra)
@@ -26,12 +25,65 @@ library(dplyr)
 
 Reading in data: 
 ```{r}
-slt_temps <-read.csv(here("data","slt_temps.csv")) 
+slt_temps <-read.csv(here("data","slt_temps.csv"))
 
 slt_precip <-read.csv(here("data","slt_precip.csv"))
-
 ```
 
+Cleaning up the data:
+```{r}
+# there are some columns in which the data is being characterized as "character" instead of "numeric" and therefore those columns have difficulty in running summary stats on. This must be due to the "M"'s present. Converting these columns to numeric format and adding NAs instead. 
+
+# converting columns to numeric format for temps
+slt_temps$june <- as.numeric(slt_temps$june)
+slt_temps$july <- as.numeric(slt_temps$july)
+slt_temps$august <- as.numeric(slt_temps$august)
+slt_temps$december <- as.numeric(slt_temps$december)
+slt_temps$january <- as.numeric(slt_temps$january)
+slt_temps$february <- as.numeric(slt_temps$february)
+
+# converting columns to numeric format for precip
+# NOTE THIS CONVERTS ALL T (TRACE) TO NA AS WELL, WHICH IS TECHNICALLY NOT TRUE BUT LESS THAN 0.01 IS INSIGNIFICANT (WE CAN CLAIM)
+slt_precip$june <- as.numeric(slt_precip$june)
+slt_precip$july <- as.numeric(slt_precip$july)
+slt_precip$august <- as.numeric(slt_precip$august)
+slt_precip$december <- as.numeric(slt_precip$december)
+slt_precip$january <- as.numeric(slt_precip$january)
+slt_precip$february <- as.numeric(slt_precip$february)
+slt_precip$may <- as.numeric(slt_precip$may)
+slt_precip$march <- as.numeric(slt_precip$march)
+slt_precip$april <- as.numeric(slt_precip$april)
+slt_precip$september <- as.numeric(slt_precip$september)
+slt_precip$october <- as.numeric(slt_precip$october)
+```
+
+```{r}
+# do we want to drop na? nah...
+#precip <- slt_precip %>% 
+ # clean_names() %>% 
+ #drop_na(january, february, march, april, may, june, july, august, september, october, november, december)
+```
+
+Grouping into Seasons
+```{r}
+# group by year and calculate the mean for the columns that coincide with the NOAA Meteorological Seasons
+slt_temps_seasonal <- slt_temps %>%
+  mutate(spring = mean(c(march, april, may), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(summer = mean(c(june, july, august), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(fall = mean(c(september, october,november), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
+
+slt_precip_seasonal <- slt_precip %>%
+  mutate(spring = mean(c(march, april, may), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(summer = mean(c(june, july, august), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(fall = mean(c(september, october,november), na.rm = TRUE)) %>% ungroup() %>% 
+  mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
+
+slt_temps_seasonal
+slt_precip_seasonal
+```
+
+<<<<<<< HEAD
 Cleaning up the data:
 ```{r}
 #There are some columns in which the data is being characterized as "character" instead of "numeric" and therefore those columns have difficulty in running summary stats on. This must be due to the "M"'s present. Converting these columns to numeric format and adding NA's instead. 
@@ -77,9 +129,139 @@ feb_temps_plot <- ggplot(slt_temps, aes(x = year, y = february)) +
   labs(title = "Avg Februrary Temperatures in South Lake Tahoe", x = "Year", y = "Temperature (F)", subtitle = "Data: NOAA Monthly Summarized Data", caption = "Regression Line Employed: Loess (locally weighted scatterplot smoothing)")
 
 feb_temps_plot
+=======
+Calculate summary statistics 
+```{r}
+# calculate annual summary statistics - precipitation
+precip_year <- slt_precip_seasonal %>% 
+  summarize(max_precip = max(annual, na.rm = TRUE), 
+            min_precip = min(annual, na.rm = TRUE), 
+            mean_precip = mean(annual, na.rm = TRUE),
+            total_yearly_precip = sum(annual))
+precip_year
+
+# calculate annual summary statistics - temperature
+temps_year <- slt_temps_seasonal %>% 
+  summarize(max_temp = max(annual, na.rm = TRUE), 
+            min_temp = min(annual, na.rm = TRUE), 
+            mean_temp = mean(annual, na.rm = TRUE))
+temps_year
+
+# calculate august statistics 
+precip_august<- slt_precip_seasonal %>% 
+  summarize(max_precip = max(august, na.rm = TRUE), 
+            min_precip = min(august, na.rm = TRUE), 
+            mean_precip = mean(august, na.rm = TRUE))
+precip_august
+
+temps_august<- slt_temps_seasonal %>% 
+  summarize(max_temp = max(august, na.rm = TRUE), 
+            min_temp = min(august, na.rm = TRUE), 
+            mean_temp = mean(august, na.rm = TRUE))
+temps_august
+>>>>>>> 743c4789cc5d7931cfebe16e5f2c9bff57209535
 ```
 
 -fututure work:
 - facet wrap each of the months into one big plot showing changing tempers by month across all the years that have been measured 
 
+Plot annual averages (temperature)
+```{r}
+# smooth yearly ggplot
+ggplot(data = slt_temps_seasonal) +
+  geom_smooth(method = "lm", 
+              color = "gray25", 
+              aes(x = year, 
+                  y = annual)) +
+  geom_point(aes(x = year, 
+               y = annual, 
+               color = annual), 
+           size = 2) +
+  scale_color_gradientn(colors = c("deepskyblue4", "firebrick")) +
+  theme_minimal(14) +
+  theme(legend.position = "none") +
+  labs(x = element_blank(), 
+       y = "Average Annual Temperature (F)") +
+  geom_text(x = 2017, y = 49, label = "Max (49.4)", color = "firebrick", size = 4) +
+  geom_text(x = 2002, y = 42.5, label = "Min (43)", color = "deepskyblue4", size = 4)
+```
+Plot annual averages (Precipitation)
+```{r}
+# smooth yearly ggplot
+ggplot(data = slt_precip_seasonal) +
+  geom_smooth(method = "lm", 
+              color = "gray25", 
+              aes(x = year, 
+                  y = annual)) +
+  geom_point(aes(x = year, 
+               y = annual, 
+               color = annual), 
+           size = 2) +
+  scale_color_gradientn(colors = c("firebrick", "deepskyblue4")) +
+  theme_minimal(14) +
+  theme(legend.position = "none") +
+  labs(x = element_blank(), 
+       y = "Average Annual Precipitation (in)") + 
+  geom_text(x = 2017, y = .123, label = "Max (.12)", color = "deepskyblue4", size = 4) +
+  geom_text(x = 2012, y = .023, label = "Min (.02)", color = "firebrick", size = 4)
+```
+Plot august averages??
+```{r}
+# precipitation
+
+# temperature 
+```
+
+### Statistical Testing
+
+**Table 1** displays the results of statistical testing performed on the climate trends data. Slope and P value refer to the results of simple linear regression. M-K significance level refers to the results of Mann-Kendall test performed on each measure.
+
+JUST COPIED LUCAS CODE HERE - BUT THINK WE NEED TO GO BACK AND EDIT MY SUMMARY STATISTICS ABOVE? RIGHT NOW THEY ONLY GENERATE ONE MIN MAX AND AVERAGE VALUE
+```{r}
+# linear regressions
+
+# max temp
+temp_max_lm <- lm(mean_daily_max_temp ~ year, data = seattle_yearly)
+temp_max_tidy <- tidy(temp_max_lm)
+
+# min temp
+temp_min_lm <- lm(mean_daily_min_temp ~ year, data = seattle_yearly)
+temp_min_tidy <- tidy(temp_min_lm)
+
+# annual precip
+yearly_precip_lm <- lm(total_yearly_precip ~ year, data = seattle_yearly)
+yearly_precip_tidy <- tidy(yearly_precip_lm)
+
+lm_tidy_all <- rbind(temp_max_tidy, 
+                     temp_min_tidy, 
+                     yearly_precip_tidy,
+                     monthly_precip_tidy)
+lm_tidy_all_coef <- lm_tidy_all %>% 
+  filter(term == "year") %>% 
+  select(-statistic, -std.error, -term)
+         
+names_vector <- c("Average Maximum Daily Temperature (F)", "Average Minimum Daily Temperature (F)", "Annual Precipitation (inches)")
+
+lm_tidy_all_clean <- data.frame(names_vector, lm_tidy_all_coef)
+
+# Mann Kendall testing for significance
+mk1 <- MannKendall(seattle_yearly$mean_daily_max_temp)
+mkt1 <- mk1$sl
+mk2 <- MannKendall(seattle_yearly$mean_daily_min_temp)
+mkt2 <- mk2$sl
+mk3 <- MannKendall(seattle_yearly$total_yearly_precip)
+mkt3 <- mk3$sl
+mk4 <- MannKendall(seattle_monthly$monthly_precip)
+mkt4 <- mk4$sl
+
+mk_vector <- c(mkt1, mkt2, mkt3, mkt4)
+
+stats_table <- data.frame(lm_tidy_all_clean, mk_vector)
+
+kable(stats_table, 
+      col.names = c("Measurement", "Slope", "P value", "M-K Significance Level"), 
+      digits = c(0, 4, 4, 4)) %>% 
+  kable_minimal(full_width = FALSE)
+```
+```
 
