@@ -181,6 +181,7 @@ ggplot(data = slt_temps_seasonal) +
   theme(legend.position = "none") +
   labs(x = element_blank(), 
        y = "Average Annual Temperature (F)") +
+  labs(title = "Average Annual Temperature", subtitle = "Data: NOAA Monthly Summarized Data", caption = "Regression Line Employed: Linear") +
   geom_text(x = 2017, y = 49, label = "Max (49.4)", color = "firebrick", size = 4) +
   geom_text(x = 2002, y = 42.5, label = "Min (43)", color = "deepskyblue4", size = 4)
 ```
@@ -201,6 +202,7 @@ ggplot(data = slt_precip_seasonal) +
   theme(legend.position = "none") +
   labs(x = element_blank(), 
        y = "Average Annual Precipitation (in)") + 
+  labs(title = "Average Annual Precipitation", subtitle = "Data: NOAA Monthly Summarized Data", caption = "Regression Line Employed: Linear") +
   geom_text(x = 2017, y = .123, label = "Max (.12)", color = "deepskyblue4", size = 4) +
   geom_text(x = 2012, y = .023, label = "Min (.02)", color = "firebrick", size = 4)
 ```
