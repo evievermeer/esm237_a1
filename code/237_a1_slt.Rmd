@@ -26,8 +26,10 @@ library(dplyr)
 Reading in data: 
 ```{r}
 slt_temps <-read.csv(here("data","slt_temps.csv"))
+slt_temps <- slt_temps %>% rename(year = ï..year)
 
 slt_precip <-read.csv(here("data","slt_precip.csv"))
+slt_precip <- slt_precip %>% rename(year = ï..year)
 ```
 
 Cleaning up the data:
@@ -161,7 +163,7 @@ temps_august<- slt_temps_seasonal %>%
 temps_august
 ```
 
--fututure work:
+-future work:
 - facet wrap each of the months into one big plot showing changing tempers by month across all the years that have been measured 
 
 Plot annual averages (temperature)
