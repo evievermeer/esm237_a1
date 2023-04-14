@@ -219,16 +219,22 @@ Plot august averages??
 
 
 ```{r}
-# dividing dataframes for precipitation and temperature into two time periods
+# dividing dataframes for precipitation and temperature into two time periods, omitting 2000 because it has some missing data
 
-slt_precip_early <- subset(slt_precip_seasonal, year >= 2000 & year <= 2010)
-slt_precip_late <- subset(slt_precip_seasonal, year >= 2011 & year <= 2022)
+slt_precip_early <- subset(slt_precip_seasonal, year >= 2001 & year <= 2011)
+slt_precip_late <- subset(slt_precip_seasonal, year >= 2012 & year <= 2022)
 
 
-slt_temp_early <- subset(slt_temps_seasonal, year >= 2000 & year <= 2010)
-slt_temp_late <- subset(slt_temps_seasonal, year >= 2011 & year <= 2022)
+slt_temp_early <- subset(slt_temps_seasonal, year >= 2001 & year <= 2011)
+slt_temp_late <- subset(slt_temps_seasonal, year >= 2012 & year <= 2022)
 ```
 
+```{r}
+# running t-tests to test for significantly different means between early 2000s and late 2000s 
+t_test_summer_temps <- t.test(slt_temp_early$summer,slt_temp_late$summer, paired=TRUE)
+
+t_test_summer_precip <- t.test(slt_precip_early$summer,slt_precip_late$summer, paired=TRUE)
+```
 
 
 
