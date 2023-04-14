@@ -76,10 +76,10 @@ slt_temps_seasonal <- slt_temps %>%
   mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
 
 slt_precip_seasonal <- slt_precip %>%
-  mutate(spring = mean(c(march, april, may), na.rm = TRUE)) %>% ungroup() %>% 
-  mutate(summer = mean(c(june, july, august), na.rm = TRUE)) %>% ungroup() %>% 
-  mutate(fall = mean(c(september, october,november), na.rm = TRUE)) %>% ungroup() %>% 
-  mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
+  rowwise() %>% mutate(spring = mean(c(march, april, may), na.rm = TRUE)) %>% ungroup() %>% 
+  rowwise() %>% mutate(summer = mean(c(june, july, august), na.rm = TRUE)) %>% ungroup() %>% 
+  rowwise() %>% mutate(fall = mean(c(september, october,november), na.rm = TRUE)) %>% ungroup() %>% 
+  rowwise() %>% mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
 
 slt_temps_seasonal
 slt_precip_seasonal
@@ -105,10 +105,10 @@ Grouping into Seasons
 ```{r}
 # Group by year and calculate the mean for the columns that coincide with the NOAA Meteorological Seasons
 slt_temps_seasonal <- slt_temps %>%
-  mutate(spring = mean(c(march, april, may), na.rm = TRUE)) %>% ungroup() %>% 
-  mutate(summer = mean(c(june, july, august), na.rm = TRUE)) %>% ungroup() %>% 
-  mutate(fall = mean(c(september, october,november), na.rm = TRUE)) %>% ungroup() %>% 
-  mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
+  rowwise() %>% mutate(spring = mean(c(march, april, may), na.rm = TRUE)) %>% ungroup() %>% 
+  rowwise() %>% mutate(summer = mean(c(june, july, august), na.rm = TRUE)) %>% ungroup() %>% 
+  rowwise() %>% mutate(fall = mean(c(september, october,november), na.rm = TRUE)) %>% ungroup() %>% 
+  rowwise() %>% mutate(winter = mean(c(december, january, february), na.rm = TRUE)) %>% ungroup()
 
 ```
  
