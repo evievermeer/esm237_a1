@@ -230,12 +230,17 @@ slt_temp_late <- subset(slt_temps_seasonal, year >= 2012 & year <= 2022)
 ```
 
 ```{r}
-# running t-tests to test for significantly different means between seasons early 2000s and late 2000s 
+# running t-tests to test for significantly different means between seasons in the early 2000s and late 2000s 
 t_test_winter_temps <- t.test(slt_temp_early$winter,slt_temp_late$winter, paired=TRUE)
 
 t_test_summer_precip <- t.test(slt_precip_early$summer,slt_precip_late$summer, paired=TRUE)
 ```
 
+
+```{r}
+#running Spearmean's rank correlation test between annual averages of precipitation and temperature 
+spearman_test <- cor.test(slt_precip$annual, slt_temps$annual, method = "spearman")
+```
 
 
 
