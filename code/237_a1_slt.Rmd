@@ -19,6 +19,7 @@ library(Kendall)
 library(kableExtra)
 library(broom)
 library(dplyr)
+library(effsize)
 
 ```
 
@@ -235,6 +236,18 @@ t_test_winter_temps <- t.test(slt_temp_early$winter,slt_temp_late$winter, paired
 
 t_test_summer_precip <- t.test(slt_precip_early$summer,slt_precip_late$summer, paired=TRUE)
 ```
+
+```{r}
+#running Cohen's D tests 
+
+cohens_winter_temps <- cohen.d(slt_temp_early$winter,slt_temp_late$winter, na.rm = TRUE) 
+
+cohens_summmer_precip <- cohen.d(slt_precip_early$summer,slt_precip_late$summer, na.rm = TRUE)
+
+
+```
+
+
 
 
 ```{r}
