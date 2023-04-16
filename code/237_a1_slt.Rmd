@@ -238,6 +238,17 @@ t_test_summer_precip <- t.test(slt_precip_early$summer,slt_precip_late$summer, p
 ```
 
 ```{r}
+#trying another t-test to compare fall precipitation
+t_test_winter_precip <- t.test(slt_precip_early$winter, slt_precip_late$winter, paired=TRUE)
+
+#with a cohen's d test too 
+cohens_winter_precip <- cohen.d(slt_precip_early$winter,slt_precip_late$winter, na.rm = TRUE)
+
+```
+
+
+
+```{r}
 #running Cohen's D tests 
 
 cohens_winter_temps <- cohen.d(slt_temp_early$winter,slt_temp_late$winter, na.rm = TRUE) 
